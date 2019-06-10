@@ -1,39 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <style>
-        .container{
-            display: flex;
-            flex: 1;
-            justify-content:space-evenly;
-            /* border: 2px solid gray; */
-            height: 100%;
-        }
-        .container > div  > h2{
-            text-align: center
-        }
-
-    </style>
+    <title>UI+Custom_Redux</title>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div class="container">
         <div id='todo'>
             <h2>Todo's</h2>
-            <input type="text" placeholder="Enter a task" id='task'/>
+            <input type="text" placeholder="Enter a task" id='task' />
             <button id="todoButton" onclick="addTodo()">Add Task</button>
-            <div id="taskAdded"></div>
         </div>
         <div>
             <h2>Goals</h2>
-            <input type="text" placeholder="Enter a goal" id='goal'/>
+            <input type="text" placeholder="Enter a goal" id='goal' />
             <button id="goalButton" onclick="addGoal()">Add Goal</button>
-            <div id="goalsAdded"></div>
         </div>
     </div>
-   <script src="index.js"></script> 
+    <div class="container_2">
+        <div id="taskAdded"></div>
+        <div id="goalsAdded"></div>
+    </div>
+    <script src="index.js"></script>
 </body>
+
 </html>

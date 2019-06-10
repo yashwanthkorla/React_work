@@ -83,6 +83,11 @@ let store = createStore(rootReducer);
 // New State notifier listerner.
 store.subscribe(() => {
     console.log("The new state is : " , store.getState())
+    const {todo,goal} = store.getState()
+    document.getElementById('taskAdded').innerHTML = '';
+    document.getElementById('goalsAdded').innerHTML = '';
+    todo.forEach(addTodoToP)
+    goal.forEach(addGoalToP)
 })
 
 // Helper Function to generate random id:
@@ -91,7 +96,10 @@ function generateRandomID(){
 }
 
 // Constant Strings
-const add_todo = "ADD_TODO",add_goal = "ADD_GOAL";
+const add_todo = "ADD_TODO",add_goal = "ADD_GOAL",rm_goal = "REMOVE_GOAL", comp_todo = "COMPLETE_TODO",
+rm_todo = "REMOVE_TODO"
+
+// Helper Functions:
 
 // Helper function for creating an object while adding the task to the store.
 function addtodo(todoValue,complete,id){
@@ -115,6 +123,27 @@ function addgoal(id,goalValue){
         }
     })
 }
+
+function removeGoal(id){
+    // console.log(id)
+    return ({
+        type: rm_goal,
+        id
+    })
+}
+
+function removeTodo(id){
+    return ({
+        type : rm_todo,
+        id
+    })
+}
+function completeToggleTodo(id){
+    return ({
+        type : comp_todo,
+        id
+    })
+}
 // To Add a Todo Item
 function addTodo(){
     const todoInput = document.getElementById('task')
@@ -131,5 +160,38 @@ function addGoal(){
     store.updateState(
         addgoal(generateRandomID(),goalValue)
     )
+}
+
+function addTodoToP(todo){
+    const node = document.createElement('p')
+    node.id = 'taskadded'
+    const rmButton = document.createElement('button')
+    node.onclick = () => {
+        store.updateState(completeToggleTodo(todo.id))
+        const p_element = document.getElementById("taskadded")
+        todo.complete == true ? p_element.style.backgroundColor = "#63ea85": p_element.style.backgroundColor = "#ded6d6"
+    }
+    rmButton.style.cssFloat = 'right'
+    rmButton.innerText = "remove"
+    rmButton.style.cursor = "pointer"
+    rmButton.onclick = () => store.updateState(removeTodo(todo.id))
+    const text = document.createTextNode(todo.todoValue)
+    node.appendChild(text)
+    node.appendChild(rmButton)
+    document.getElementById('taskAdded').appendChild(node)
+}
+
+function addGoalToP(goal){
+    const node = document.createElement('p')
+    node.id = "goaladded"
+    const rmButton = document.createElement('button')
+    rmButton.style.cssFloat = 'right'
+    rmButton.innerText = "remove"
+    rmButton.style.cursor = "pointer"
+    rmButton.onclick = () => store.updateState(removeGoal(goal.id))
+    const text = document.createTextNode(goal.goalValue)
+    node.appendChild(text)
+    node.appendChild(rmButton)
+    document.getElementById('goalsAdded').appendChild(node)
 }
 
