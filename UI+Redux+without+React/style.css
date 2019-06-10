@@ -1,0 +1,36 @@
+.container{
+    display: flex;
+    flex: 1;   
+    justify-content:space-evenly;
+    /* border: 2px solid gray; */
+    height: 100%;
+}
+.container > div  > h2{
+    text-align: center
+}
+
+.container_2{
+    display: flex;
+    flex: 1;
+    justify-content: space-around;
+}
+#taskAdded,#goalsAdded{
+    width: 50%;
+}
+#taskadded,#goaladded{
+    padding: 10px;
+    background-color: #ded6d6;
+    margin: 5px 10px 0px 10px;
+}
+
+#taskAdded > p:hover,#goalsAdded > p:hover{
+    cursor: pointer;
+}
+
+#task,#goal{
+    padding: 6px;
+}
+
+.complete{
+    background-color: gray
+}
