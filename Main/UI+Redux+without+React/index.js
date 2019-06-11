@@ -1,49 +1,16 @@
-// Custom State Management Library
-
-// Creating a store which holds state tree, actions and reducers(pure functions)
-
-/* 
-Store should have :
- 1. The State - local variable
- 2. Get State - getState Function
- 3. Listen and notify the state change. - subscribe Function
- 4. Update the state -updateState Function
- */
-function createStore(reducer) {
-    // Create a state local variable
-    let state
-    let listeners = []
-    
-    // getState
-    const getState = () => state
-
-    // update the state
-    const updateState = (action) => {
-        state = reducer(state,action)
-        listeners.forEach((l) => l()) // To show the listerners which u have . Basically to make the user know that we added it to the state.
-    }
-    
-    // function which adds the listeners - To Notify the changes done to the state.
-    const subscribe = (listener) => {
-        listeners.push(listener) // to subscribe
-        return (
-            listeners.filter((l) => l !== listener) // to unsubscribe
-        )
-    }
-
-    return (
-        {
-            getState,
-            subscribe,
-            updateState
-        }
-    )
-}
+/* Using Redux state management library.
+Rules :
+1. Use getState,subscribe & dispatch to get,listen and modify the state.
+*/
 
 // reducers 
-
 // Todo Reducers - can do add, remove and toggle
-function toDo(state=[],action){
+
+// Imports
+import {add_todo,add_goal,rm_goal,comp_todo,rm_todo} from '../helperFunctions/forTodoProject/constants'
+
+
+function todo(state=[],action){
     switch(action.type) {
         case 'ADD_TODO' :
           return state.concat([action.todo])
@@ -69,16 +36,11 @@ function goal(state=[],action){
       }
 }
 
-// Root reducer with two reducer functions.
-function rootReducer(state={},action){
-    return {
-        todo : toDo(state.todo,action),
-        goal : goal(state.goal,action)
-    }
-}
 
-// Creating an instance of the createStore function
-let store = createStore(rootReducer);
+let store = Redux.createStore(Redux.combineReducers({
+    todo,
+    goal
+}));
 
 // New State notifier listerner.
 store.subscribe(() => {
@@ -95,9 +57,6 @@ function generateRandomID(){
     return ((Math.random()*100).toString(36).substring(3)) + (new Date().getTime().toString(36))
 }
 
-// Constant Strings
-const add_todo = "ADD_TODO",add_goal = "ADD_GOAL",rm_goal = "REMOVE_GOAL", comp_todo = "COMPLETE_TODO",
-rm_todo = "REMOVE_TODO"
 
 // Helper Functions:
 
@@ -149,7 +108,7 @@ function addTodo(){
     const todoInput = document.getElementById('task')
     const todoValue = todoInput.value
     todoInput.value = ''
-    store.updateState(addtodo(todoValue,false,generateRandomID()))
+    store.dispatch(addtodo(todoValue,false,generateRandomID()))
 }
 
 // To Add a Goal Item
@@ -157,7 +116,7 @@ function addGoal(){
     const goalInput = document.getElementById('goal')
     const goalValue = goalInput.value
     goalInput.value = ''
-    store.updateState(
+    store.dispatch(
         addgoal(generateRandomID(),goalValue)
     )
 }
@@ -167,14 +126,14 @@ function addTodoToP(todo){
     node.id = 'taskadded'
     const rmButton = document.createElement('button')
     node.onclick = () => {
-        store.updateState(completeToggleTodo(todo.id))
+        store.dispatch(completeToggleTodo(todo.id))
         const p_element = document.getElementById("taskadded")
         todo.complete == true ? p_element.style.backgroundColor = "#63ea85": p_element.style.backgroundColor = "#ded6d6"
     }
     rmButton.style.cssFloat = 'right'
     rmButton.innerText = "remove"
     rmButton.style.cursor = "pointer"
-    rmButton.onclick = () => store.updateState(removeTodo(todo.id))
+    rmButton.onclick = () => store.dispatch(removeTodo(todo.id))
     const text = document.createTextNode(todo.todoValue)
     node.appendChild(text)
     node.appendChild(rmButton)
@@ -188,7 +147,7 @@ function addGoalToP(goal){
     rmButton.style.cssFloat = 'right'
     rmButton.innerText = "remove"
     rmButton.style.cursor = "pointer"
-    rmButton.onclick = () => store.updateState(removeGoal(goal.id))
+    rmButton.onclick = () => store.dispatch(removeGoal(goal.id))
     const text = document.createTextNode(goal.goalValue)
     node.appendChild(text)
     node.appendChild(rmButton)
