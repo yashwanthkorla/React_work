@@ -7,7 +7,7 @@ Store should have :
  1. The State - local variable
  2. Get State - getState Function
  3. Listen and notify the state change. - subscribe Function
- 4. Update the state -updateState Function
+ 4. Update the state -dispatch Function
  */
 
 // Imports
@@ -22,7 +22,7 @@ function createStore(reducer) {
     const getState = () => state
 
     // update the state
-    const updateState = (action) => {
+    const dispatch = (action) => {
         console.log(action)
         state = reducer(state,action)
         listeners.forEach((l) => l()) // To show the listerners which u have . Basically to make the user know that we added it to the state.
@@ -40,7 +40,7 @@ function createStore(reducer) {
         {
             getState,
             subscribe,
-            updateState
+            dispatch
         }
     )
 }
@@ -152,7 +152,7 @@ function addTodo(){
     const todoInput = document.getElementById('task')
     const todoValue = todoInput.value
     todoInput.value = ''
-    store.updateState(addtodo(todoValue,false,generateRandomID()))
+    store.dispatch(addtodo(todoValue,false,generateRandomID()))
 }
 
 // To Add a Goal Item
@@ -160,7 +160,7 @@ function addGoal(){
     const goalInput = document.getElementById('goal')
     const goalValue = goalInput.value
     goalInput.value = ''
-    store.updateState(
+    store.dispatch(
         addgoal(generateRandomID(),goalValue)
     )
 }
@@ -170,14 +170,14 @@ function addTodoToP(todo){
     node.id = 'taskadded'
     const rmButton = document.createElement('button')
     node.onclick = () => {
-        store.updateState(completeToggleTodo(todo.id))
+        store.dispatch(completeToggleTodo(todo.id))
         const p_element = document.getElementById("taskadded")
         todo.complete == true ? p_element.style.backgroundColor = "#63ea85": p_element.style.backgroundColor = "#ded6d6"
     }
     rmButton.style.cssFloat = 'right'
     rmButton.innerText = "remove"
     rmButton.style.cursor = "pointer"
-    rmButton.onclick = () => store.updateState(removeTodo(todo.id))
+    rmButton.onclick = () => store.dispatch(removeTodo(todo.id))
     const text = document.createTextNode(todo.todoValue)
     node.appendChild(text)
     node.appendChild(rmButton)
@@ -191,7 +191,7 @@ function addGoalToP(goal){
     rmButton.style.cssFloat = 'right'
     rmButton.innerText = "remove"
     rmButton.style.cursor = "pointer"
-    rmButton.onclick = () => store.updateState(removeGoal(goal.id))
+    rmButton.onclick = () => store.dispatch(removeGoal(goal.id))
     const text = document.createTextNode(goal.goalValue)
     node.appendChild(text)
     node.appendChild(rmButton)
