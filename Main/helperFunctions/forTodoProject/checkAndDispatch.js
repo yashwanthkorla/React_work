@@ -1,5 +1,4 @@
 /* Custom verification which is done before dispatching action to the reducer.
- *
  * if u want to use verification inbetween the dispatch and the reducer(pure functions/ the functions which changes the state based on aciton type)
  * u can make use of redux lirbary applymiddleware method. This should be passed as the second argument to the createstore.
  * This applymiddleware accepts n number of functions which does the verification or logging or other task before
