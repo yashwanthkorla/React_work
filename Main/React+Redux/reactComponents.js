@@ -102,12 +102,16 @@ function List(props) {
       {props.items.map(item => (
         <li key={item.id}>
           <span>{item.name}</span>
+          <button onClick={() => props.remove(item.id)}>X</button>
         </li>
       ))}
     </ul>
   );
 }
 class Goal extends React.Component {
+  remove = (id) => {
+    this.props.store.dispatch(removeGoal(id))
+  }
   addGoal = e => {
     e.preventDefault();
     const inputValue = this.input.value;
@@ -120,12 +124,15 @@ class Goal extends React.Component {
         <h1>Goals</h1>
         <input type="text" ref={input => (this.input = input)} />
         <button onClick={this.addGoal}>Add</button>
-        <List items={this.props.goals} />
+        <List items={this.props.goals} remove={this.remove}/>
       </div>
     );
   }
 }
 class Todo extends React.Component {
+  remove = (id) => {
+    this.props.store.dispatch(removeTodo(id))
+  }
   addTodo = e => {
     e.preventDefault();
     const inputValue = this.input.value;
@@ -138,7 +145,7 @@ class Todo extends React.Component {
         <h1>Todo</h1>
         <input type="text" ref={input => (this.input = input)} />
         <button onClick={this.addTodo}>Add</button>
-        <List items={this.props.todos} />
+        <List items={this.props.todos} remove={this.remove}/>
       </div>
     );
   }
